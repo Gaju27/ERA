@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Animal Identifier 🐾</title>
+</head>
+<body>
+  <h2>Upload an Image</h2>
+  <input type="file" id="fileInput" />
+  <button onclick="uploadImage()">Upload</button>
+  <div id="result"></div>
+
+  <script>
+    async function uploadImage() {
+      const fileInput = document.getElementById('fileInput');
+      const file = fileInput.files[0];
+      if (!file) {
+        alert("Please select an image!");
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append("file", file);
+
+      try {
+        const response = await fetch("http://13.233.43.213:5000/predict", {
+          method: "POST",
+          body: formData
+        });
+
+        const data = await response.json();
+        document.getElementById('result').innerHTML =
+          `<p><b>File:</b> ${data.filename}</p>
+           <p><b>Type:</b> ${data.content_type}</p>
+           <p><b>Prediction:</b> ${data.prediction}</p>
+           <p><b>Confidence:</b> ${(data.confidence * 100).toFixed(2)}%</p>`;
+      } catch (err) {
+        console.error("Error:", err);
+        document.getElementById('result').innerText = "Error uploading file!";
+      }
+    }
+  </script>
+</body>
+</html>
