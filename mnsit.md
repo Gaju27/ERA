@@ -2,7 +2,10 @@
 
 ## Overview
 This project implements a **Convolutional Neural Network (CNN)** using PyTorch to classify handwritten digits (MNIST dataset).  
-The model is lightweight (~10k parameters) but still achieves **high accuracy (>99%)** with proper training.
+The model is lightweight (~10k parameters) but still achieves **high accuracy (>99%)** with proper training.  
+
+You can see the full implementation & training notebook here:  
+[MNSIT Notebook](https://github.com/Gaju27/ERA/blob/main/Pytorch_tutorial.ipynb)
 
 ---
 
