@@ -1,0 +1,32 @@
+ data:
+   dataset_name: CIFAR10
+   data_dir: data/
+   batch_size: 128
+   num_workers: 4
+   image_size: [32, 32]
+   normalize:
+     mean: [0.4914, 0.4822, 0.4465]
+     std: [0.2470, 0.2435, 0.2616]
+
+ model:
+   name: Custom
+   num_classes: 10
+   dropout: 0.3
+
+ training:
+   epochs: 50
+   learning_rate: 0.001
+   weight_decay: 0.0005
+   optimizer: Adam
+   scheduler: cosine
+   early_stopping:
+     patience: 10
+     min_delta: 0.0005
+   checkpoint_dir: checkpoints/
+   log_interval: 50
+
+ logging:
+   log_level: INFO
+   log_file: logs/train.log
+
+
