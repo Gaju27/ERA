@@ -1,66 +1,61 @@
-## CIFAR-10 Experiments and Modular PyTorch Pipeline
+# 📚 CIFAR-10 CNN Model Optimization Project
+[![Python](https://img.shields.io/badge/Python-3.8%2B-blue.svg)](https://www.python.org/)
+[![PyTorch](https://img.shields.io/badge/PyTorch-1.10%2B-%23EE4C2C.svg?logo=PyTorch&logoColor=white)](https://pytorch.org/)
+[![Albumentations](https://img.shields.io/badge/Albumentations-%23FFB300.svg?logo=python&logoColor=white)](https://albumentations.ai/)
+[![NumPy](https://img.shields.io/badge/NumPy-1.21%2B-blue.svg?logo=numpy&logoColor=white)](https://numpy.org/)
+[![Matplotlib](https://img.shields.io/badge/Matplotlib-3.4%2B-blue.svg?logo=matplotlib&logoColor=white)](https://matplotlib.org/)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-This repository documents an iterative journey of building and improving a CNN for CIFAR-10, along with a clean, modular PyTorch training pipeline extracted from the final notebook.
 
-### Highlights
-- Optimized `ciferNet` CNN targeting receptive field ≈ 44 and ≈ 200k parameters
-- Depthwise separable convolutions, controlled dilation, and efficient downsampling
-- Albumentations-based data augmentation to reduce overfitting
-- Modular Python package with `models/`, `data/`, `engine/`, and `main.py`
 
----
+This project explores multiple iterations of Convolutional Neural Network (CNN) architectures designed for the CIFAR-10 dataset. The primary goal is to optimize model performance (accuracy) while keeping the parameter count low and preventing overfitting. Below is a detailed walkthrough of each experiment and notebook.
 
-## Experiment Timeline (Notebooks)
 
-### 1) `colab_files/cifar10.ipynb`
-- Verified dataset integrity, image sizes, and channel details.
+## 🌟 Key Features
 
-### 2) `colab_files/cifar10_transform_values.ipynb`
-- Explored and validated augmentation/normalization values for CIFAR-10.
+- ✅ **Final Model (CiferNet)**: ~200K parameters, **Receptive Field ≈ 44**
+- 🔧 Advanced CNN techniques:  
+  - **Depthwise separable convolutions**  
+  - **1x1 bottlenecks**
+  - **Dilation** and **stride-based downsampling**
+- 📦 Integrated with **Albumentations** for aggressive and flexible data augmentation
+- 🧱 Clean and modular codebase (models, data, engine, etc.)
+- 🧪 Extensive experimentation across 7+ model iterations
 
-### 3) `colab_files/cifar10_v1.ipynb`
-- Built a baseline CNN (~380k params) and trained for 8 epochs.
-- Purpose: establish a working skeleton to iterate and improve upon.
+📘 Notebooks Summary (with Links)
 
-### 4) `colab_files/cifar10_v2.ipynb`
-- Reduced parameters by introducing a 1×1 bottleneck before ConvBlock4.
-- Goal: shrink ConvBlock4 while retaining capacity and receptive field structure.
+| Notebook | Description |
+|----------|-------------|
+| [`cifar10.ipynb`](https://github.com/Gaju27/ERA/blob/main/session%207/colab_files/cifar10.ipynb) | 🔍 **Image Inspection**<br>- Checked image size and basic image statistics from the CIFAR-10 dataset. |
+| [`cifar10_transform_values.ipynb`](https://github.com/Gaju27/ERA/blob/main/session%207/colab_files/cifar10_transform_values.ipynb) | ⚙️ **Transform Exploration**<br>- Analyzed transformation values and preprocessing effects before feeding data into the model. |
+| [`cifar10_v1.ipynb`](https://github.com/Gaju27/ERA/blob/main/session%207/colab_files/cifar10_v1.ipynb) | 🧱 **Initial Model (Skeleton)**<br>- Base model (~380K parameters).<br>- Trained for 8 epochs.<br>- Served as the starting point. |
+| [`cifar10_v2.ipynb`](https://github.com/Gaju27/ERA/blob/main/session%207/colab_files/cifar10_v2.ipynb) | 🧠 **Bottleneck Optimization**<br>- Added 1×1 conv before `ConvBlock4` to reduce parameters.<br>- Preserved channels and receptive field. |
+| [`cifar10_v3.ipynb`](https://github.com/Gaju27/ERA/blob/main/session%207/colab_files/cifar10_v3.ipynb) | 🌀 **Depthwise + Pointwise Convolutions**<br>- Used depthwise separable convs.<br>- Reduced params to ~171K.<br>- Accuracy: ~77% in 8 epochs. |
+| [`cifar10_v4.ipynb`](https://github.com/Gaju27/ERA/blob/main/session%207/colab_files/cifar10_v4.ipynb) | 🛡️ **Regularization Attempt**<br>- Added Dropout at all layers.<br>- Params ~170K.<br>- No major accuracy improvement. |
+| [`cifar10_v5.ipynb`](https://github.com/Gaju27/ERA/blob/main/session%207/colab_files/cifar10_v5.ipynb) | 🧪 **Albumentations for Augmentation**<br>- Used HFlip, ShiftScaleRotate, CoarseDropout.<br>- Accuracy: ~84% at 35 epochs. |
+| [`cifar10_v6.ipynb`](https://github.com/Gaju27/ERA/blob/main/session%207/colab_files/cifar10_v6.ipynb) | 🧬 **Receptive Field Tuning**<br>- Dilation=2, Kernel=5×5, Stride=2.<br>- Controlled spatial processing. |
+| [`cifar10_v7.ipynb`](https://github.com/Gaju27/ERA/blob/main/session%207/colab_files/cifar10_v7.ipynb) | 🚀 **Final Optimized Architecture (Revised CiferNet)**<br>- RF ≈ 44, Params ≈ 200K.<br>- Used dilation ×2, strided layers, depthwise convs.<br>- Balanced accuracy and efficiency. |
 
-### 5) `colab_files/cifar10_v3.ipynb`
-- Switched to depthwise + pointwise (separable) convolutions.
-- Params reduced to ~171k; trained 8 epochs; reached ~77% accuracy.
-
-### 6) `colab_files/cifar10_v4.ipynb`
-- Observed overfitting; added dropout across layers (≈170k params).
-- No meaningful accuracy improvement; moved focus to augmentation.
-
-### 7) `colab_files/cifar10_v5.ipynb`
-- Introduced Albumentations (HorizontalFlip, ShiftScaleRotate, CoarseDropout).
-- Clear regularization gains; at 35 epochs achieved ~84% accuracy.
-
-### 8) `colab_files/cifar10_v6.ipynb`
-- Tuned receptive field growth and downsampling:
-  - Dilation: 2 (controlled RF expansion)
-  - Kernel size: reduced (e.g., 5×5 in that iteration) to avoid excessive RF
-  - Stride: 2 for gradual downsampling
-  - Padding: adjusted to balance dilation and preserve spatial size
-
-### 9) `cifar10_v7.ipynb`
-- Finalized an optimized `ciferNet` with the following design:
-  - 3×3 kernels early for efficiency
-  - Strides of 2 for controlled downsampling
-  - Dilation ×2 in mid/late layers to expand receptive field
-  - Depthwise separable convolutions in deeper layers to cut parameters
-  - Balanced filter counts to hit ≈200k params
-- Targeted outcomes:
-  - Receptive Field ≈ 44
-  - Parameter Count ≈ 200k
 
 ---
 
-## Modular Code Layout
+## ✅ Summary
 
-The final notebook (`cifar10_v7.ipynb`) has been refactored into a clean Python module structure so you can train directly from `main.py`:
+| Version      | Key Feature                              | Params   | Accuracy     |
+|--------------|-------------------------------------------|----------|--------------|
+| v1           | Base model                                | ~380K    | Baseline     |
+| v2           | 1x1 bottleneck convolution                | ↓ ~250k  | ~78%(8 epochs   |
+| v3           | Depthwise + Pointwise Convs               | ~171K    | ~77% (8 epochs) |
+| v4           | Dropout Regularization                    | ~170K    | No gain      |
+| v5           | Albumentation for Augmentation            | ~170K    | ~84% (35 epochs) |
+| v6           | Dilation + Receptive Field Control        | ~170K    | ~80% (35 epochs) |
+| v7           | Final Optimized Model (CiferNet v2)       | ~173K    | ~85% (81 epochs) Best trade-off |
+
+---
+
+---
+
+## 📂 Repository Structure
 
 ```
 models/
@@ -73,32 +68,35 @@ engine/
   train.py           # train() and test() loops
 main.py              # Entry point to run training/testing
 ```
-
 ---
 
-## How to Run
 
-1) Install dependencies:
+## 🚀 How to Run the Project
+
+### 1️⃣ Install Dependencies
+Make sure you have Python 3.8+ installed, then run:
+
 ```bash
 pip install torch torchvision albumentations tqdm
-```
+````
 
-2) Train the model:
+### 2️⃣ Train the Model
+
+Start training using:
+
 ```bash
 python main.py
 ```
 
-Defaults: SGD (lr=0.01, momentum=0.9), 35 epochs, Albumentations-enabled loaders, device auto-detected (CUDA if available).
+### ⚙️ Defaults
 
----
+* **Optimizer**: SGD (`lr=0.01`, `momentum=0.9`)
+* **Epochs**: 35
+* **Data Augmentation**: Enabled via Albumentations
+* **Device**: Automatically uses GPU (`cuda`) if available
 
-## Notes and Next Steps
-- Swap optimizers/schedulers easily in `main.py` (e.g., Adam + CosineAnnealingLR from the notebooks).
-- Tune augmentations in `data/transforms.py` (e.g., probabilities, magnitudes).
-- Consider label smoothing, CutMix/MixUp, or LR warmup if pushing beyond ~84%.
-
----
-
+```
+```
 ## Final Training Output (from `cifar10_v7.ipynb`)
 ### Reached target test accuracy of 85.0% at epoch 81!
 
@@ -513,12 +511,38 @@ Reached target test accuracy of 85.0% at epoch 81!
 
 ```
 
-> Note: The above is a representative excerpt from the final training cell to showcase steady improvement; full logs are available in `cifar10_v7.ipynb`.
+## 🧭 Notes, Next Steps & Future Directions
+
+### ✅ Immediate Improvements
+- 🔄 Swap optimizers/schedulers easily in `main.py` (e.g., **Adam** + **CosineAnnealingLR** as used in notebooks).
+- 🧪 Tune data augmentations in `data/transforms.py`:
+  - Adjust probabilities and magnitudes for better generalization.
+- 🧬 Explore regularization techniques:
+  - **Label smoothing**
+  - **CutMix** / **MixUp**
+  - **Learning rate warm-up**
 
 ---
 
-## Credits
-- CIFAR-10 dataset and PyTorch ecosystem
-- Albumentations for robust image augmentation
+### 🚀 Future Directions
+
+- 🔧 **Hyperparameter Tuning**  
+  Fine-tune the final model architecture using grid search or automated tools (e.g., Optuna, Ray Tune).
+
+- 📉 **Advanced Learning Rate Schedulers**  
+  Experiment with schedulers such as:
+  - **OneCycleLR**
+  - **CosineAnnealingLR**
+  to improve convergence and training efficiency.
+
+- 🌍 **Dataset Expansion**  
+  Evaluate model performance on more complex datasets like:
+  - **CIFAR-100**
+
+- ☁️ **Cloud-Based Training with AWS SageMaker**  
+  Train and scale your model using **AWS SageMaker**:
+  - Utilize GPU-powered instances for faster training.
+  - Use built-in tools for monitoring, logging, and deployment.
+
 
 
