@@ -1,0 +1,9 @@
+torch
+torchvision
+torch-lr-finder
+tqdm
+matplotlib
+seaborn
+scikit-learn
+kaggle
+opencv-python
